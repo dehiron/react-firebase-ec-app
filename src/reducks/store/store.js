@@ -1,4 +1,5 @@
-import { createStore as reduxCreateStore, combineReducers, applyMiddleware } from 'redux';
+import { createStore as reduxCreateStore, combineReducers, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk';
 //Reducersのインポート
 import { connectRouter, routerMiddleware } from 'connected-react-router';
 // import　{ ProductReducer } from '../products/reducers';
@@ -12,7 +13,8 @@ function createStore(history){
             router: connectRouter(history),
         }),
         applyMiddleware(
-            routerMiddleware(history)
+            routerMiddleware(history),
+            thunk
         )
     );
 }
