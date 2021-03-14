@@ -5,6 +5,7 @@ const signInAction = (userState) => {
         payload: {
             isSignedIn: true,
             uid: userState.uid,
+            role: userState.role,
             username: userState.username
         }
     }

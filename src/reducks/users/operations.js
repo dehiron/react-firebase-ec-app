@@ -43,28 +43,37 @@ const signUp = (username, email, password, confirmPassword) => {
 
 
 const signIn = (email, password) => {
-    return async (dispatch, getState) => {
-        
-        const state = getState(); //メソッドとして呼び出す為()が必須
-        const isSignedIn = state.users.isSignedIn
-        
-        if (!isSignedIn) {
-
-            const url = "https://api.github.com/users/dehiron"
-
-            const response = await fetch(url)
-                                .then(res => res.json())
-                                .catch(() => null)
-            
-            const username = response.login
-
-            dispatch(signInAction({
-                isSignedIn: true,
-                uid: "0001",
-                username: username
-            }))
-            dispatch(push("/"))
+    return async (dispatch) => {
+        // Validation
+        if (email === "" || password === ""){
+            alert("必須項目です")
+            return false
         }
+        
+        auth.signInWithEmailAndPassword(email, password)
+            .then(result => {
+                const user = result.user
+
+                if (user) {
+                    const uid = user.uid
+                    db.collection("users").doc(uid).get()
+                        .then(snapshot => {
+                            const data = snapshot.data()
+
+                            dispatch(signInAction({
+                                isSignedIn: true,
+                                role: data.role,
+                                uid: uid,
+                                username: data.username
+                            }))
+
+                            dispatch(push("/"))
+                        })
+                }
+            })
+
+
+    
     }
 }
 
