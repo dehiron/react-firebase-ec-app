@@ -1,7 +1,7 @@
 import * as Actions from './actions';
 import initialState from '../store/initialState';
 
-const UserReducer = (state = initialState.users, action) => {
+const UsersReducer = (state = initialState.users, action) => {
     switch (action.type){
         case Actions.SIGN_IN:
             return {
@@ -12,4 +12,4 @@ const UserReducer = (state = initialState.users, action) => {
     }
 }
 
-export { UserReducer }
+export { UsersReducer }

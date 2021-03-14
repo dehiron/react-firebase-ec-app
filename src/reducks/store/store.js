@@ -1,14 +1,19 @@
-import { createStore as reduxCreateStore, combineReducers } from "redux";
+import { createStore as reduxCreateStore, combineReducers, applyMiddleware } from 'redux';
 //Reducersのインポート
-import　{ ProductReducer } from "../products/reducers";
-import { UserReducer } from "../users/reducers"
+import { connectRouter, routerMiddleware } from 'connected-react-router';
+// import　{ ProductReducer } from '../products/reducers';
+import { UsersReducer } from '../users/reducers';
 
-function createStore(){//reduxのcreateStoreの別名
+function createStore(history){
     return reduxCreateStore(
-        combineReducers({//reducersをまとめるもの
-            products: ProductReducer,
-            users: UserReducer,
-        })
+        combineReducers({
+            // products: ProductReducer,
+            users: UsersReducer,
+            router: connectRouter(history),
+        }),
+        applyMiddleware(
+            routerMiddleware(history)
+        )
     );
 }
 
