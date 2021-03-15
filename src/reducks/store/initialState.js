@@ -1,5 +1,6 @@
 const initialState = {
     products:{
+        list: []
 
     },
     users:{
