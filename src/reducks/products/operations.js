@@ -3,7 +3,7 @@ import {push} from 'connected-react-router';
 
 const productsRef = db.collection("products")
 
-const saveProduct = (name, description, category, gender, price, images) => {
+const saveProduct = (id, name, description, category, gender, price, images) => {
     return async (dispatch) => {
         const timestamp = FirebaseTimestamp.now()
 
@@ -17,15 +17,14 @@ const saveProduct = (name, description, category, gender, price, images) => {
             updated_at: timestamp
         }
 
+        if (id === ""){
+            const ref = productsRef.doc();
+            id = ref.id;
+            data.id = id;
+            data.created_at = timestamp; //新規作成の時のみ使うやつ
+        }
         
-        const ref = productsRef.doc();
-        const id = ref.id;
-        data.id = id;
-        data.created_at = timestamp; //新規作成の時のみ使うやつ
-        // ↑
-        // 事前に自動裁判されたIDを取得
-        // ↓
-        return productsRef.doc(id).set(data)　//新規作成の場合はmarge:trueいらない
+        return productsRef.doc(id).set(data, {merge: true})　//{merge:true}をつけることによって修正された部分だけ更新される
             .then(()=>{
                 dispatch(push("/"))
             }).catch((error) => {
