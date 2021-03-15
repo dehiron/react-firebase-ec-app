@@ -77,5 +77,33 @@ const signIn = (email, password) => {
     }
 }
 
+//認証リッスン用関数
+const listenAuthState = () => {
+    return async (dispatch) => {
+        return auth.onAuthStateChanged(user => {
+            if (user) {//認証完了している状態
+                
+                const uid = user.uid
 
-export {signIn, signUp}
+                db.collection("users").doc(uid).get()
+                    .then(snapshot => {
+                        const data = snapshot.data()
+
+                        dispatch(signInAction({
+                            isSignedIn: true,
+                            role: data.role,
+                            uid: uid,
+                            username: data.username
+                        }))
+                        // dispatch(push("/"))
+                    })
+            } else {//認証完了していなければ
+                dispatch(push("/signin"))
+            }
+        })
+
+    }
+}
+
+
+export {signIn, signUp, listenAuthState}
