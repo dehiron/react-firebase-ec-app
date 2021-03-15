@@ -8,6 +8,11 @@ const UsersReducer = (state = initialState.users, action) => {
                 ...state,
                 ...action.payload
             }
+        case Actions.SIGN_OUT:
+            return {
+                // ...state, 上書きの概念
+                ...action.payload
+            }
         default: return state
     }
 }

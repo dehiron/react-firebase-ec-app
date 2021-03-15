@@ -77,6 +77,15 @@ const signIn = (email, password) => {
     }
 }
 
+const signOut = () => {
+    return async (dispatch) => {
+        auth.signOut()
+            .then(()=>{
+                dispatch(push('/signin'))
+            })
+    } 
+}
+
 //認証リッスン用関数
 const listenAuthState = () => {
     return async (dispatch) => {
@@ -106,4 +115,4 @@ const listenAuthState = () => {
 }
 
 
-export {signIn, signUp, listenAuthState}
+export {signIn, signUp, signOut, listenAuthState}
