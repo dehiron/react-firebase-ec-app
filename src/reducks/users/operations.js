@@ -87,6 +87,24 @@ const signOut = () => {
     } 
 }
 
+　const resetPassword = (email) => {
+    return async (dispatch) => {
+        if(email === ""){
+            alert("必須項目が未入力です")
+            return false
+        } else {
+            auth.sendPasswordResetEmail(email)
+                .then(()=>{
+                    alert("入力されたメールアドレスにパスワードリセット用のメールを送りしました。")
+                    dispatch(push("/signin"))
+                }).catch(()=>{
+                    alert("パスワードリセットに失敗しました。")
+                })
+        }
+    }
+
+}
+
 //認証リッスン用関数
 const listenAuthState = () => {
     return async (dispatch) => {
@@ -116,4 +134,4 @@ const listenAuthState = () => {
 }
 
 
-export {signIn, signUp, signOut, listenAuthState}
+export {signIn, signUp, signOut, resetPassword, listenAuthState}
