@@ -21,7 +21,7 @@ const Reset = () => {
 
     return(
         <div className="c-section-container">
-            <h2 className="u-text__headline u-text-center">サインイン</h2>
+            <h2 className="u-text__headline u-text-center">パスワードリセット</h2>
             <div className="module-spacer--medium" />
             
             <TextInput 
