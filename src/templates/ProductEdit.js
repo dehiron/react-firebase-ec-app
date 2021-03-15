@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { TextInput, SelectBox, PrimaryButton } from '../components/UIkit';
 import {saveProduct} from '../reducks/products/operations';
+import ImageArea from '../components/Products/ImageArea';
 
 
 const ProductEdit = () => {
@@ -12,6 +13,7 @@ const ProductEdit = () => {
     const [description, setDescription] = useState("");
     const [category, setCategory] = useState("");
     const [gender, setGender] = useState("");
+    const [images, setImages] = useState([]);
     const [price, setPrice] = useState("");
     
 
@@ -46,6 +48,7 @@ const ProductEdit = () => {
         <section>
             <h2 className="u-text__headline u-text-center">商品の登録と編集</h2>
             <div className="c-section-container">
+                <ImageArea images = {images} setImages={setImages} />
                 <TextInput
                     fullWidth={true} label={"商品名"} multiline={false} required={true}
                     onChange={inputName} rows={1} value={name} type={"text"}
