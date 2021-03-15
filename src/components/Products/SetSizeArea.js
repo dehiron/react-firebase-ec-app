@@ -1,4 +1,4 @@
-import React, { useCallback,useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import TableContainer from '@material-ui/core/TableContainer'
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -72,6 +72,11 @@ const SetSizeArea = (props) => {
         const newSizes = props.sizes.filter((item, i) => i !== deleteIndex);
         props.setSizes(newSizes);
     }
+
+    //商品編集ページに飛んだ時、すでに入っているデータの次から編集したい場合？
+    useEffect(() => {
+        setIndex(props.sizes.length)
+    }, [props.sizes.length])
 
     return(
         <div>
