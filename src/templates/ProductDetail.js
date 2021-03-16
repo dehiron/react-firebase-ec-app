@@ -1,9 +1,10 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { db } from '../firebase/index';
 import { makeStyles } from '@material-ui/styles';
 import HTMLReactParser from 'html-react-parser';
 import {ImageSwiper} from '../components/Products';
+import {SizeTable} from '../components/Products'
 
 const useStyles = makeStyles((theme) => ({
     sliderBox: {
@@ -27,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
             width: 320
         },
         [theme.breakpoints.up("sm")]:{
-            margin: "0, auto",
+            margin: "0 auto", //ここに, が入ると画像と情報間が詰まってしまう
             height: "auto",
             width: 400
         }
@@ -72,12 +73,12 @@ const ProductDetail = () => {
                 <div className="p-grid__row">
                     <div className={classes.sliderBox}>
                         <ImageSwiper images={product.images} />
-
                     </div>
                     <div className={classes.detail}>
                         <h2 className="u-text__headline">{product.name}</h2>
                         <p className={classes.price}>{product.price.toLocaleString()}</p>
                         <div className="module-spacer--small" />
+                        <SizeTable sizes = {product.sizes} />
                         <div className="module-spacer--small" />
                         <p>{returnCodeToBr(product.description)}</p>
                     </div>
