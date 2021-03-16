@@ -1,1 +1,2 @@
-export {default as Header} from './header.js';
+export {default as Header} from './Header.js';
+export {default as HeaderMenus} from './HeaderMenus.js';

@@ -6,6 +6,7 @@ import logo from '../../assets/image/icons/logo.png';
 import { useSelector, useDispatch } from 'react-redux';
 import { getIsSignedIn } from '../../reducks/users/selectors';
 import { push } from 'connected-react-router';
+import {HeaderMenus} from './index';
 
 const useStyles = makeStyles({
     root: {
@@ -20,7 +21,7 @@ const useStyles = makeStyles({
         maxWidth: 1024,
         width: "100%"
     },
-    iconButtons: {
+    iconButtons: { //右寄せするためのスタイル
         margin: "0 0 0 auto"
     }
 
@@ -41,6 +42,11 @@ const Header = () => {
                     <img src={logo} alt="eventclip logo" width="128px"
                         onClick = {() => {dispatch(push("/"))}}
                     />
+                    {isSignedIn && (
+                        <div className={classes.iconButtons}>
+                            <HeaderMenus />
+                        </div>
+                    )}
 
                 </Toolbar>
             </AppBar>
