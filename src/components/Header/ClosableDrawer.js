@@ -70,34 +70,39 @@ const ClosableDrawer = (props) => {
                 classes={{paper: classes.drawerPaper}}
                 ModalProps={{keepMounted:true}} //スマホでの反応がよくなるらしい
             >
-                <div className = {classes.searchField}>
-                    <TextInput
-                        fullWidth={false} label={"キーワードを入力"} multiline={false}
-                        onChange={inputKeyword} required={false} rows={1} value={keyword} type={"text"}
-                    />
-                    <IconButton>
-                        <SearchIcon />
-                    </IconButton>
-                </div>
-                <Divider />
-                <List>
-                    {menus.map(menu => (
-                        <ListItem button key={menu.id} onClick={(e) => {menu.func(e, menu.value)}}>
-                            <ListItemIcon>
-                                {menu.icon}
-                            </ListItemIcon>
-                            <ListItemText primary={menu.label}/>
-                        </ListItem>
-                    ))}
+                <div 
+                    onClose={(e) => props.onClose(e)}
+                    onKeyDown={(e) => props.onClose(e)}
+                >
+                    <div className = {classes.searchField}>
+                        <TextInput
+                            fullWidth={false} label={"キーワードを入力"} multiline={false}
+                            onChange={inputKeyword} required={false} rows={1} value={keyword} type={"text"}
+                        />
+                        <IconButton>
+                            <SearchIcon />
+                        </IconButton>
+                    </div>
+                    <Divider />
+                    <List>
+                        {menus.map(menu => (
+                            <ListItem button key={menu.id} onClick={(e) => {menu.func(e, menu.value)}}>
+                                <ListItemIcon>
+                                    {menu.icon}
+                                </ListItemIcon>
+                                <ListItemText primary={menu.label}/>
+                            </ListItem>
+                        ))}
 
-                    <ListItem button key="logout" onClick={() => {dispatch(signOut())}} >
-                        <ListItemIcon>
-                            <ExitToAppIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Logout" />
-                        {/* primaryがラベルの扱いになる */}
-                    </ListItem>
-                </List>
+                        <ListItem button key="logout" onClick={() => {dispatch(signOut())}} >
+                            <ListItemIcon>
+                                <ExitToAppIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Logout" />
+                            {/* primaryがラベルの扱いになる */}
+                        </ListItem>
+                    </List>
+                </div>
             </Drawer>
         </nav>
 
