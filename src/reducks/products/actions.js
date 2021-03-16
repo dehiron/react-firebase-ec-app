@@ -6,4 +6,12 @@ const fetchProductsAction = (products) => {
     }
 }
 
-export {FETCH_PRODUCTS, fetchProductsAction}
+const DELETE_PRODUCTS = "DELETE_PRODUCTS";
+const deleteProductAction = (products) => {
+    return {
+        type: "DELETE_PRODUCTS",
+        payload: products
+    }
+}
+
+export {FETCH_PRODUCTS, fetchProductsAction, DELETE_PRODUCTS, deleteProductAction}

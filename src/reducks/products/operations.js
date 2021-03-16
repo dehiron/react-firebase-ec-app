@@ -1,6 +1,7 @@
 import { db, FirebaseTimestamp } from "../../firebase";
 import {push} from 'connected-react-router';
 import {fetchProductsAction} from './actions';
+import {deleteProductAction} from './actions';
 
 const productsRef = db.collection("products")
 
@@ -50,4 +51,17 @@ const saveProduct = (id, name, description, category, gender, price, images, siz
     }
 }
 
-export {saveProduct, fetchProducts};
+const deleteProduct = (id) => {
+    return async (dispatch, getState) => {
+        productsRef.doc(id).delete() //DBから削除
+            .then(()=>{ //reduxのストアの情報も更新
+                const prevProducts = getState().products.list;
+                const nextProducts = prevProducts.filter(product => product.id !== id);
+                dispatch(deleteProductAction(nextProducts));
+            })
+    }
+}
+
+
+
+export {saveProduct, fetchProducts, deleteProduct};
