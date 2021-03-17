@@ -24,4 +24,12 @@ const signOutAction = () => {
     }
 };
 
-export { SIGN_IN, signInAction, SIGN_OUT, signOutAction }
+const FETCH_PRODUCTS_IN_CART = "FETCH_PRODUCTS_IN_CART";
+const fetchProductsInCartAction = (products) => {
+    return{
+        type: "FETCH_PRODUCTS_IN_CART",
+        payload: products
+    }
+};
+
+export { SIGN_IN, signInAction, SIGN_OUT, signOutAction, FETCH_PRODUCTS_IN_CART, fetchProductsInCartAction }

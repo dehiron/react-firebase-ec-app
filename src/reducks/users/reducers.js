@@ -13,6 +13,11 @@ const UsersReducer = (state = initialState.users, action) => {
                 // ...state, 上書きの概念
                 ...action.payload
             }
+        case Actions.FETCH_PRODUCTS_IN_CART:
+            return {
+                ...state,
+                cart: [...action.payload]
+            }
         default: return state
     }
 }
