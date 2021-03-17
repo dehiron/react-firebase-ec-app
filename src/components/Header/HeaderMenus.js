@@ -10,6 +10,7 @@ import { db } from '../../firebase/index';
 // import { BrandingWatermarkTwoTone } from '@material-ui/icons';
 // import { fetchProducts } from '../../reducks/products/operations';
 import { fetchProductsInCart } from '../../reducks/users/operations'
+import {push} from 'connected-react-router'
 
 const HeaderMenus = (props) => {
 
@@ -51,7 +52,7 @@ const HeaderMenus = (props) => {
 
     return (
         <>
-            <IconButton>
+            <IconButton onClick={()=>{dispatch(push("/cart"))}}>
                 <Badge badgeContent={productsInCart.length} color={'secondary'}>
                     <ShoppingCartIcon />
                 </Badge>
