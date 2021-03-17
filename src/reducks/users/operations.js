@@ -2,6 +2,15 @@ import {signInAction, signOutAction} from './actions'
 import {push} from 'connected-react-router'
 import {auth, db, FirebaseTimestamp} from '../../firebase/index'
 
+const addProductToCart = (addedProduct) => {
+    return async (dispatch, getState) => {
+        const uid = getState().users.uid;
+        const cartRef = db.collection("users").doc(uid).collection("cart").doc(); //コレクション内にサブコレクションを作る
+        addedProduct["cartId"] = cartRef.id; //自分自身のカードIDを持たせる
+        await cartRef.set(addedProduct);
+        dispatch(push("/")); //一旦ホームに戻る
+    }
+}
 
 const signUp = (username, email, password, confirmPassword) => {
     return async (dispatch) => {
@@ -134,4 +143,4 @@ const listenAuthState = () => {
 }
 
 
-export {signIn, signUp, signOut, resetPassword, listenAuthState}
+export {signIn, signUp, signOut, resetPassword, listenAuthState, addProductToCart}
