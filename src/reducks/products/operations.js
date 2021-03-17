@@ -27,12 +27,13 @@ const orderProduct = (productsInCart, amount) => {
 
         let products = [];
         let soldOutProducts = []; //在庫がある商品だけを購入する実装のやり方
-
-        const batch = db.batch();
+        
+        let batch = db.batch(); //バグ対処用の修正
 
         for (const product of productsInCart) {
             const snapshot = await productsRef.doc(product.productId).get()
             const sizes = snapshot.data().sizes;
+            // console.log("1",sizes)
 
             const updatedSizes = sizes.map(size => {
                 if (size.size === product.size) {
@@ -49,6 +50,7 @@ const orderProduct = (productsInCart, amount) => {
                 }
             })
             
+
             products.push({
                 id: product.productId, //注文履歴用の商品データ
                 images: product.images,
@@ -57,16 +59,18 @@ const orderProduct = (productsInCart, amount) => {
                 size: product.size,
             });
 
-            batch.update(
-                productsRef.doc(product.productId),
-                {sizes: updatedSizes}
-            )
-
-            batch.delete(
-                userRef.collection("cart").doc(product.cartId)
-            )
+            // console.log("2",product.size);
+            // console.log("3",updatedSizes);
+            batch.update(productsRef.doc(product.productId), {"sizes": updatedSizes})
+            batch.delete(userRef.collection("cart").doc(product.cartId))
+            batch.commit(); //バグ対処用の修正
+            batch = db.batch(); //バグ対処用の修正
         }
 
+
+        //在庫2点の商品を3回クリックしてカート内に3点の状態で注文すると、
+        //エラーは出るけど在庫分の2点は注文が完了する状態になっている。
+        //この場合ロールバックできてないのではないか？
         if (soldOutProducts.length > 0 ) {//バッチの処理内でエラーメッセージだして購入は発生しない
             const errorMessage = (soldOutProducts.lentgh > 1) ? soldOutProducts.join('と') : soldOutProducts[0];
             alert("申し訳ありません。" + errorMessage + "が在庫切れとなったため、注文処理を中断しました。")
