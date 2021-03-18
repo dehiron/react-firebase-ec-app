@@ -1,4 +1,4 @@
-import {signInAction, signOutAction, fetchProductsInCartAction} from './actions'
+import {signInAction, signOutAction, fetchProductsInCartAction, fetchOrdersHistoryAction} from './actions'
 import {push} from 'connected-react-router'
 import {auth, db, FirebaseTimestamp} from '../../firebase/index'
 
@@ -6,6 +6,25 @@ import {auth, db, FirebaseTimestamp} from '../../firebase/index'
 const fetchProductsInCart = (products) => {
     return async (dispatch) => {
         dispatch(fetchProductsInCartAction(products))
+    }
+}
+
+const fetchOrdersHistory = () => {
+    return async (dispatch, getState) => {
+        const uid = getState().users.uid;
+        const list = [];
+
+        db.collection("users").doc(uid)
+            .collection("orders")
+            .orderBy("updated_at", "desc")
+            .get()
+            .then((snapshots) => {
+                snapshots.forEach(snapshot => {
+                    const data = snapshot.data()
+                    list.push(data)
+                })
+                dispatch(fetchOrdersHistoryAction(list))
+            })
     }
 }
 
@@ -103,7 +122,7 @@ const signOut = () => {
     } 
 }
 
-　const resetPassword = (email) => {
+const resetPassword = (email) => {
     return async (dispatch) => {
         if(email === ""){
             alert("必須項目が未入力です")
@@ -118,7 +137,6 @@ const signOut = () => {
                 })
         }
     }
-
 }
 
 //認証リッスン用関数
@@ -150,4 +168,4 @@ const listenAuthState = () => {
 }
 
 
-export {signIn, signUp, signOut, resetPassword, listenAuthState, addProductToCart, fetchProductsInCart}
+export {signIn, signUp, signOut, resetPassword, listenAuthState, addProductToCart, fetchProductsInCart, fetchOrdersHistory}

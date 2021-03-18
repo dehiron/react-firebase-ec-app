@@ -18,6 +18,11 @@ const UsersReducer = (state = initialState.users, action) => {
                 ...state,
                 cart: [...action.payload]
             }
+        case Actions.FETCH_ORDERS_HISTORY:
+            return {
+                ...state,
+                orders: [...action.payload] //配列が渡ってきてる
+            }
         default: return state
     }
 }

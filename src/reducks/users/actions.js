@@ -32,4 +32,12 @@ const fetchProductsInCartAction = (products) => {
     }
 };
 
-export { SIGN_IN, signInAction, SIGN_OUT, signOutAction, FETCH_PRODUCTS_IN_CART, fetchProductsInCartAction }
+const FETCH_ORDERS_HISTORY = "FETCH_ORDERS_HISTORY";
+const fetchOrdersHistoryAction = (history) => {
+    return{
+        type: "FETCH_ORDERS_HISTORY",
+        payload: history
+    }
+};
+
+export { SIGN_IN, signInAction, SIGN_OUT, signOutAction, FETCH_PRODUCTS_IN_CART, fetchProductsInCartAction, FETCH_ORDERS_HISTORY, fetchOrdersHistoryAction }

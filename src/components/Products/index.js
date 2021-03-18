@@ -5,3 +5,5 @@ export {default as ProductCard} from './ProductCard.js';
 export {default as ImageSwiper} from './ImageSwiper.js';
 export {default as SizeTable} from './SizeTable.js';
 export {default as CartListItem} from './CartListItem.js';
+export {default as OrderHistoryItem} from './OrderHistoryItem.js';
+export {default as OrderedProducts} from './OrderedProducts.js';

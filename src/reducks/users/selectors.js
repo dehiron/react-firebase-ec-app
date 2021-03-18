@@ -22,4 +22,9 @@ const getProductsInCart = createSelector(
     state => state.cart
 );
 
-export {getUserId, getUserName, getIsSignedIn, getProductsInCart};
+const getOrdersHistory = createSelector(
+    [usersSelector],
+    state => state.orders
+);
+
+export {getUserId, getUserName, getIsSignedIn, getProductsInCart, getOrdersHistory};
