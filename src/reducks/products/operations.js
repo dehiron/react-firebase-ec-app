@@ -5,9 +5,13 @@ import {deleteProductAction} from './actions';
 
 const productsRef = db.collection("products")
 
-const fetchProducts = () => {
+const fetchProducts = (gender, category) => {
     return async (dispatch) => {
-        productsRef.orderBy("updated_at", "desc").get()
+        let query = productsRef.orderBy("updated_at", "desc");
+        query = (gender !== "")? query.where("gender", "==", gender) : query;
+        query = (category !== "")? query.where("category", "==", category) : query;
+        
+        query.get()
             .then(snapshots => {
                 const productList = []
                 snapshots.forEach(snapshot => {
