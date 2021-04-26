@@ -3,10 +3,12 @@ const signInAction = (userState) => {
     return{
         type: "SIGN_IN",
         payload: {
+            customer_id: userState.customer_id,
             isSignedIn: true,
             email:userState.email,
             role: userState.role,
             uid: userState.uid,
+            payment_method_id: userState.payment_method_id,
             username: userState.username
         }
     }

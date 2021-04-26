@@ -27,4 +27,14 @@ const getOrdersHistory = createSelector(
     state => state.orders
 );
 
-export {getUserId, getUserName, getIsSignedIn, getProductsInCart, getOrdersHistory};
+const getCustomerId = createSelector(
+    [usersSelector],
+    state => state.customer_id
+);
+
+const getPaymentMethodId = createSelector(
+    [usersSelector],
+    state => state.payment_method_id
+);
+
+export {getUserId, getUserName, getIsSignedIn, getProductsInCart, getOrdersHistory, getCustomerId, getPaymentMethodId};
