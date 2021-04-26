@@ -24,11 +24,11 @@ const UserMyPage = () => {
             <div className="center">
                 <PrimaryButton
                     label={"カード情報の編集"}
-                    onClick={() => transition("user/payment/edit")}
+                    onClick={() => transition("/user/payment/edit")}
                 />
                 <PrimaryButton
                     label={"注文履歴の確認"}
-                    onClick={() => transition("order/history")}
+                    onClick={() => transition("/order/history")}
                 />
             </div>
         </section>

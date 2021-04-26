@@ -1,0 +1,1 @@
+export {defualt as PaymentEdit} from './PaymentEdit';
