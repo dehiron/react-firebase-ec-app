@@ -10,9 +10,14 @@
       "**/.*",
       "**/node_modules/**"
     ],
-    "rewrites": [ {
-      "source": "**",
-      "destination": "/index.html"
+    "rewrites": [ 
+      {
+        "source": "/v1/customer",
+        "function": "stripeCustomer"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
     } ]
 
   },
