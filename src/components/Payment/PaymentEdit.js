@@ -19,10 +19,10 @@ const PaymentEdit = () => {
     const [card, setCard] = useState({});
 
     const register = useCallback(() => {
-        dispatch(registerCard(stripe, elements)) //reduxから
+        dispatch(registerCard(stripe, elements, customerId)) //reduxから
     
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[stripe, elements])
+    },[stripe, elements, customerId])
 
     const goBackToMyPage = useCallback(()=>{
         dispatch(push("/user/mypage"))

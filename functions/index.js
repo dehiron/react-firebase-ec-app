@@ -62,3 +62,29 @@ exports.retrievePaymentMethod = functions.https.onRequest((req, res) => {
         })
     })
 })
+
+exports.updatePaymentMethod = functions.https.onRequest((req, res) => {
+    const corsHandler = cors({origin: true})
+
+    corsHandler(req, res, () => {
+        //POSTメソッドかどうか判定
+        if (req.method !== 'POST'){
+            sendResponse(res, 405, {error: "Invalid Reuest method"})
+        }
+
+        return stripe.paymentMethods.detach(//今登録してある情報をまず削除
+            //detachの際に必要な引数＝methodId
+            req.body.prevPaymentMethodId
+        ).then((paymentMethod) => {
+            return stripe.paymentMethods.attach(
+                req.body.nextPaymentMethodId,
+                {customer: req.body.customerId}
+            ).then((nextPaymentMethodId) => {
+                sendResponse(res, 200, paymentMethod)
+            })
+        }).catch((error) => {
+            sendResponse(res, 500, {error: error})
+        })
+    })
+})
+
