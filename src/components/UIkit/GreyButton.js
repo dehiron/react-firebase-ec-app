@@ -7,7 +7,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.grey["300"],
         fontSize: 16,
         height: 48,
-        marginButton: 16,
+        marginBottom: 16,
         width: 256
     }
 }))

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch } from "react-router";
-import { SignUp, SignIn, Auth, Reset, ProductEdit, ProductList, ProductDetail, CartList, OrderConfirm, OrderHistory} from "./templates";
+import { SignUp, SignIn, Auth, Reset, ProductEdit, ProductList, ProductDetail, CartList, OrderConfirm, OrderHistory, UserMyPage} from "./templates";
 
 const Router = () => {
     return (
@@ -19,6 +19,8 @@ const Router = () => {
                 <Route exact path="/cart" component={CartList} />
                 <Route exact path="/order/confirm" component={OrderConfirm} />
                 <Route exact path="/order/history" component={OrderHistory} />
+
+                <Route exact path="/user/mypage" component={UserMyPage} />
             </Auth>
         </Switch>
     )
