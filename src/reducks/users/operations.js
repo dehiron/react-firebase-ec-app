@@ -97,6 +97,7 @@ const signIn = (email, password) => {
 
                             dispatch(signInAction({
                                 isSignedIn: true,
+                                email:data.email,
                                 role: data.role,
                                 uid: uid,
                                 username: data.username
@@ -153,6 +154,7 @@ const listenAuthState = () => {
 
                         dispatch(signInAction({
                             isSignedIn: true,
+                            email:data.email,
                             role: data.role,
                             uid: uid,
                             username: data.username

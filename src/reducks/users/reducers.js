@@ -23,6 +23,11 @@ const UsersReducer = (state = initialState.users, action) => {
                 ...state,
                 orders: [...action.payload] //配列が渡ってきてる
             }
+        case Actions.UPDATE_USER_STATE:
+            return {
+                ...state,
+                ...action.payload
+            }
         default: return state
     }
 }

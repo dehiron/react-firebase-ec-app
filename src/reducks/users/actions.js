@@ -4,6 +4,7 @@ const signInAction = (userState) => {
         type: "SIGN_IN",
         payload: {
             isSignedIn: true,
+            email:userState.email,
             role: userState.role,
             uid: userState.uid,
             username: userState.username
@@ -40,4 +41,12 @@ const fetchOrdersHistoryAction = (history) => {
     }
 };
 
-export { SIGN_IN, signInAction, SIGN_OUT, signOutAction, FETCH_PRODUCTS_IN_CART, fetchProductsInCartAction, FETCH_ORDERS_HISTORY, fetchOrdersHistoryAction }
+const UPDATE_USER_STATE = "UPDATE_USER_STATE";
+const  updateUserStateAction = (userState) => {
+    return{
+        type: "UPDATE_USER_STATE",
+        payload: userState
+    }
+};
+
+export { SIGN_IN, signInAction, SIGN_OUT, signOutAction, FETCH_PRODUCTS_IN_CART, fetchProductsInCartAction, FETCH_ORDERS_HISTORY, fetchOrdersHistoryAction, UPDATE_USER_STATE, updateUserStateAction }
