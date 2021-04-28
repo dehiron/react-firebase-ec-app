@@ -11,10 +11,13 @@ const PaymentEdit = () => {
 
     const dispatch = useDispatch();
     const selector = useSelector((state) => state);
-    const customerId = getCustomerId(selector)
-    const paymentMethodId = getPaymentMethodId(selector)
     const stripe = useStripe(); //stripeのフックス
     const elements = useElements(); //stripeのフックス
+    //カード情報を登録している人であれば自動的に取得される
+    const customerId = getCustomerId(selector)
+    const paymentMethodId = getPaymentMethodId(selector)
+    //カード情報を登録している人であれば自動的に取得される
+    
 
     const [card, setCard] = useState({});
 
@@ -29,15 +32,17 @@ const PaymentEdit = () => {
     },[dispatch])
 
 
-    useEffect(()=>{
+    //カード情報を登録している人であれば自動的にカード情報が取得される
+    useEffect(()=>{ 
         (async() => {
-            const cardData = await retrievePaymentMethod(paymentMethodId)
+            const cardData = await retrievePaymentMethod(paymentMethodId) //operationsから渡される
             if (cardData) {
                 setCard(cardData)
             }
         })()
     },[paymentMethodId])
 
+    //第二引数の値が変更されたら再計算してconstで定義されている定数に渡す
     const cardNumber = useMemo(() => {
         if(card.last4){
             return "**** **** **** " + card.last4
