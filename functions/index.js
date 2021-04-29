@@ -31,7 +31,7 @@ exports.stripeCustomer = functions.https.onRequest((req, res) => {
         }
 
         //POSTだった場合
-        return stripe.customers.create({ //stripeのメソッド
+        return stripe.customers.create({ //顧客アカウントを作成するstripeのメソッド
             description: "EC App demo user", //なんの顧客なのかわかる様に
             email: req.body.email,
             //ユニークなデータをメタデータとして持たせることで重複の処理を防ぐ
@@ -55,7 +55,7 @@ exports.retrievePaymentMethod = functions.https.onRequest((req, res) => {
             sendResponse(res, 405, {error: "Invalid Reuest method"})
         }
 
-        return stripe.paymentMethods.retrieve(　//stripeのメソッド
+        return stripe.paymentMethods.retrieve(　//paymentの方法を取得（登録？）stripeのメソッド
             req.body.paymentMethodId
         ).then((paymentMethod) => { //ここで渡されるのはStripeのレスポンスとして決められている（https://stripe.com/docs/api/payment_methods/retrieve）-> firebase.jsonのエンドポイント作り方にも繋がる
             sendResponse(res, 200, paymentMethod)
@@ -90,3 +90,26 @@ exports.updatePaymentMethod = functions.https.onRequest((req, res) => {
     })
 })
 
+exports.createPaymentIntent = functions.https.onRequest((req, res) => {
+    const corsHandler = cors({origin : true})
+
+    corsHandler(req, res, () => {
+        if (req.method !== "POST"){
+            sendResponse(res, 405, {error: "Invalid Request"})
+        }
+
+        return stripe.paymentIntents.create({ //参照：https://stripe.com/docs/payments/payment-intents
+            amount: req.body.amount,
+            confirm: true,
+            currency: "JPY",
+            customer: req.body.customerId,
+            metadata: {idempotencyKey: req.body.paymentMethodId}, // 冪等性を保つ＝二重決済を防ぐために、この決済でkeyとなる値を渡す
+            payment_method: req.body.paymentMethodId
+        }).then((paymentIntent) => {
+            sendResponse(res, 200, paymentIntent);
+        }).catch((error) => {
+            console.log(error)
+            sendResponse(res, 500, {error: error})
+        })
+    })
+})

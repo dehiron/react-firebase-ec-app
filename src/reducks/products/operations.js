@@ -2,6 +2,8 @@ import { db, FirebaseTimestamp } from "../../firebase";
 import {push} from 'connected-react-router';
 import {fetchProductsAction} from './actions';
 import {deleteProductAction} from './actions';
+import { hideLoadingAction, showLoadingAction } from "../loading/actions";
+import { createPaymentIntent } from "../payments/operations";
 
 const productsRef = db.collection("products")
 
@@ -25,6 +27,9 @@ const fetchProducts = (gender, category) => {
 
 const orderProduct = (productsInCart, amount) => {
     return async (dispatch, getState) => {
+
+        dispatch(showLoadingAction("決済処理中..."))
+
         const uid = getState().users.uid;
         const userRef = db.collection("users").doc(uid);
         const timestamp = FirebaseTimestamp.now();
@@ -80,29 +85,47 @@ const orderProduct = (productsInCart, amount) => {
             alert("申し訳ありません。" + errorMessage + "が在庫切れとなったため、注文処理を中断しました。")
             return false
         } else {
-            batch.commit()
+            //決済処理導入前はここでbatch.commit()をしていたが、コミットの前に決済処理を加える
+
+            //元々commit.then内にあった処理を上に持ってきた
+            const orderRef = userRef.collection("orders").doc(); 
+            //ordersというコレクションに新しくドキュメントを作るリファレンスを作ってる
+            const date = timestamp.toDate();
+            const shippingDate = FirebaseTimestamp.fromDate(new Date(date.setDate(date.getDate() +3)));
+
+            const history = {
+                amount: amount,
+                created_at: timestamp,
+                id: orderRef.id,
+                products: products,
+                shipping_date: shippingDate,
+                updated_at: timestamp
+            };
+
+            // orderRef.set(history);
+
+            //元々commit.then内にあった処理を上に持ってきた
+
+            //ここから新しく追加
+            batch.set(orderRef, history, {merge: true});
+            //Stripeの決済処理を追加
+            const customerId = getState().users.customer_id
+            const paymentMethodId = getState().users.payment_method_id
+            const paymentIntent = await createPaymentIntent(amount, customerId, paymentMethodId)
+
+            if (paymentIntent){ //決済処理が成功した場合
+                return batch.commit()
                 .then(() => {
-                    const orderRef = userRef.collection("orders").doc(); 
-                    //ordersというコレクションに新しくドキュメントを作るリファレンスを作ってる
-                    const date = timestamp.toDate();
-                    const shippingDate = FirebaseTimestamp.fromDate(new Date(date.setDate(date.getDate() +3)));
-
-                    const history = {
-                        amount: amount,
-                        created_at: timestamp,
-                        id: orderRef.id,
-                        products: products,
-                        shipping_date: shippingDate,
-                        updated_at: timestamp
-                    }
-                    orderRef.set(history);
+                    dispatch(hideLoadingAction());
                     dispatch(push("/order/complete"))
-
-
                 }).catch(()=>{
+                    dispatch(hideLoadingAction());
                     alert("注文処理に失敗しました。通信環境を確認し、もう一度お試しください。")
-                    return false
                 })
+            } else { //決済処理が失敗した場合
+                dispatch(hideLoadingAction());
+                alert("決済処理に失敗しました。通信環境を確認し、もう一度お試しください。")
+            }
         }
     }
 }

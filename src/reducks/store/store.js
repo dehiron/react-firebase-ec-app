@@ -3,6 +3,7 @@ import thunk from 'redux-thunk';
 import { createLogger } from "redux-logger";
 //Reducersのインポート
 import { connectRouter, routerMiddleware } from 'connected-react-router';
+import { LoadingReducer } from '../loading/reducers';
 import　{ ProductsReducer } from '../products/reducers';
 import { UsersReducer } from '../users/reducers';
 
@@ -21,7 +22,7 @@ function createStore(history){
 
     return reduxCreateStore(
         combineReducers({
-            // products: ProductReducer,
+            loading: LoadingReducer,
             users: UsersReducer,
             products: ProductsReducer,
             router: connectRouter(history),

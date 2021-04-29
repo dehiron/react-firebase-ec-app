@@ -147,3 +147,20 @@ export const retrievePaymentMethod = async (paymentMethodId) => {
     // console.log(paymentMethod)
     return paymentMethod.card
 }
+
+export const createPaymentIntent = async (amount, customerId, paymentMethodId) => {
+
+    const response = await fetch(BASE_URL+"/v1/createPaymentIntent", {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify({
+            amount: amount,
+            customerId: customerId,
+            paymentMethodId: paymentMethodId,
+        })
+    });
+
+    const paymentIntentResponse = await response.json();
+    // console.log(paymentIntentResponse.body)
+    return JSON.parse(paymentIntentResponse.body)
+}
