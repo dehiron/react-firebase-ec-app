@@ -28,6 +28,10 @@
         "function": "createPaymentIntent"
       },
       {
+        "source": "/v1/createSubscription",
+        "function": "createSubscription"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
     } ]

@@ -143,13 +143,14 @@ export const retrievePaymentMethod = async (paymentMethodId) => {
     })
 
     const paymentMethodResponse = await response.json()
+    console.log(paymentMethodResponse)
     const paymentMethod = JSON.parse(paymentMethodResponse.body)
     // console.log(paymentMethod)
     return paymentMethod.card
 }
 
 export const createPaymentIntent = async (amount, customerId, paymentMethodId) => {
-
+    //ここがfetchメソッドでcloud functionsのAPIを（エンドポイント経由で）叩いている部分
     const response = await fetch(BASE_URL+"/v1/createPaymentIntent", {
         method: "POST",
         headers: headers,
@@ -163,4 +164,23 @@ export const createPaymentIntent = async (amount, customerId, paymentMethodId) =
     const paymentIntentResponse = await response.json();
     // console.log(paymentIntentResponse.body)
     return JSON.parse(paymentIntentResponse.body)
+}
+
+export const createSubscription = async (customerId, paymentMethodId) => {
+    console.log(2)
+    console.log("customerId", customerId)
+    console.log("paymentMethodId", paymentMethodId)
+    //ここがfetchメソッドでcloud functionsのAPIを（エンドポイント経由で）叩いている部分
+    const response = await fetch(BASE_URL + "/v1/createSubscription", {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify({
+            customerId: customerId,
+            paymentMethodId: paymentMethodId,
+        })
+    })
+
+    const subscriptionResponse = await response.json()
+    console.log(subscriptionResponse)
+    return JSON.parse(subscriptionResponse.body)
 }

@@ -1,6 +1,8 @@
 const functions = require('firebase-functions');
 const stripe = require('stripe')(functions.config().stripe.key);
 const cors = require('cors')
+// import { db } from "../src/firebase";
+
 
 // レスポンスを返すための関数
 // 最終的にはどのAPIもサーバーからのレスポンスをこの関数を介してクライアント側にさらにレスポンスを返す
@@ -105,10 +107,33 @@ exports.createPaymentIntent = functions.https.onRequest((req, res) => {
             customer: req.body.customerId,
             metadata: {idempotencyKey: req.body.paymentMethodId}, // 冪等性を保つ＝二重決済を防ぐために、この決済でkeyとなる値を渡す
             payment_method: req.body.paymentMethodId
-        }).then((paymentIntent) => {
+        }).then((paymentIntent) => {　//ここで渡されるのはStripeのレスポンスとして決められている　https://stripe.com/docs/api/payment_intents/create
             sendResponse(res, 200, paymentIntent);
         }).catch((error) => {
             console.log(error)
+            sendResponse(res, 500, {error: error})
+        })
+    })
+})
+
+exports.createSubscription = functions.https.onRequest((req, res) => {
+    const corsHandler = cors({origin : true})
+
+    corsHandler(req, res, () => {
+        console.log(req)
+        if (req.method !== "POST"){
+            sendResponse(res, 405, {error: "Invalid Request"})
+        }
+        return stripe.subscriptions.create({
+            default_payment_method: req.body.paymentMethodId, //必要情報
+            customer: req.body.customerId,
+            items: [
+                {price: "price_1IkkNxHBC5oG00I9baai8iQZ"}
+            ]
+        }).then((subscription) => {
+            sendResponse(res, 200, subscription);
+        }).catch((error) => {
+            console.log(error),
             sendResponse(res, 500, {error: error})
         })
     })

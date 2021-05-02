@@ -3,7 +3,7 @@ import {CardElement, useStripe, useElements} from '@stripe/react-stripe-js'
 import { PrimaryButton, TextDetail } from '../UIkit';
 import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
-import { registerCard, retrievePaymentMethod } from '../../reducks/payments/operations';
+import { registerCard, retrievePaymentMethod, createSubscription } from '../../reducks/payments/operations';
 import {getCustomerId, getPaymentMethodId} from "../../reducks/users/selectors"
 
 
@@ -26,6 +26,16 @@ const PaymentEdit = () => {
     
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[stripe, elements, customerId])
+
+    const subscription = useCallback(async () => {
+        console.log(1)
+        console.log(customerId)
+        const sub = await createSubscription(customerId, paymentMethodId)
+        // dispatch(createSubscription(customerId)) //reduxから
+        console.log(sub)
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
 
     const goBackToMyPage = useCallback(()=>{
         dispatch(push("/user/mypage"))
@@ -50,6 +60,8 @@ const PaymentEdit = () => {
             return "未登録"
         }
     },[card])
+
+    console.log(selector)
 
     return (
         <section className="c-section-container">
@@ -84,6 +96,10 @@ const PaymentEdit = () => {
                 <PrimaryButton 
                     label = {"カード情報を保存する"}
                     onClick={register}
+                />
+                <PrimaryButton 
+                    label = {"サブスクテスト"}
+                    onClick={subscription}
                 />
                 <PrimaryButton 
                     label = {"マイページに戻る"}
