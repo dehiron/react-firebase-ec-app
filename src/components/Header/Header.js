@@ -53,6 +53,7 @@ const Header = () => {
                     <img src={logo} alt="eventclip logo" width="128px"
                         onClick = {() => {dispatch(push("/"))}}
                     />
+                    <p>aaa</p>
                     {isSignedIn && (
                         <div className={classes.iconButtons}>
                             <HeaderMenus handleDrawerToggle = {handleDrawerToggle}/>
